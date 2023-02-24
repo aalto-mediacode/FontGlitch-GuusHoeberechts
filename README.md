@@ -1,4 +1,4 @@
-# FontGlitch-GuusHoeberechts
+# Font Glitch - Guus Hoeberechts
 Typographic glitch generator made in Processing - for GMC 2023
 
 
