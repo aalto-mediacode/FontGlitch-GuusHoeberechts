@@ -13,7 +13,8 @@ PFont font;
 PGraphics pg;
 
 float scaleC, aC, bC, mC, n2C, n3C;
-boolean noiseC, waveC, sup1C, sup2C;
+float a, b, m, n2, n3;
+boolean noiseC, waveC, sup1C, sup2C, cross;
 int hide, sup1, sup2;
 String text1, text2, text3;
 
@@ -40,6 +41,7 @@ void setup() {
   waveC = false;
   sup1C = true;
   sup2C = true;
+  cross = false;
   
 //-------- draw controls --------
   
@@ -93,14 +95,16 @@ void setup() {
          .setSize(50,10)
          .setAutoClear(false);
   control.addTextfield("Line2")
-         .setPosition(10,250)
+         .setPosition(10,260)
          .setSize(50,10)
          .setAutoClear(false);
   control.addTextfield("Line3")
-         .setPosition(10,270)
+         .setPosition(10,290)
          .setSize(50,10)
          .setAutoClear(false);
-  
+  control.addButton("Cross")
+         .setPosition(10,320)
+         .setSize(50,10); 
 }
 
 void draw() {
@@ -136,6 +140,7 @@ void draw() {
     control.get(Textfield.class, "Line1").show();
     control.get(Textfield.class, "Line2").show();
     control.get(Textfield.class, "Line3").show();
+    control.get("Cross").show();
   } else{
     control.get("Scale").hide();
     control.get("A").hide();
@@ -150,6 +155,7 @@ void draw() {
     control.get(Textfield.class, "Line1").hide();
     control.get(Textfield.class, "Line2").hide();
     control.get(Textfield.class, "Line3").hide();
+    control.get("Cross").hide();
   }
 
 //---------- draw PGraphics ------------
@@ -157,6 +163,11 @@ void draw() {
   pg.beginDraw();
   pg.background(0);
   pg.fill(0,0,255);
+  pg.stroke(255);
+    if(cross){
+      pg.line(0, height/2, width, height/2);
+      pg.line(width/2, 0, width/2, height);
+    }
   pg.textFont(font);
   pg.textSize(250);
   pg.pushMatrix();
@@ -166,6 +177,8 @@ void draw() {
   pg.text(text3,100, 350);
   pg.popMatrix();
   pg.endDraw();
+  
+   
 
 //-------- set tile amount (max 100) --------
 
@@ -191,11 +204,19 @@ void draw() {
       // or remove sin/cos
       // get rid of x & y's to have more control 
       
-        float a = sin(y*scaleC*aC); // change x to framecount
-        float b = cos(y*scaleC*bC); // change x to framecount
-        float m = -cos(mC)*2;
-        float n2 = sin(x*n2C) * (x*scaleC*10) ;
-        float n3 = cos(x*n3C) * (y*-scaleC*10) ;  
+         a = sin(y*scaleC*aC); 
+         b = cos(y*scaleC*bC); 
+         m = -cos(mC)*2;
+         n2 = sin(x*n2C) * (x*scaleC*10) ;
+         n3 = cos(x*n3C) * (y*-scaleC*10) ;  
+        
+          // use these settings instead for a less glitchy, slower effect
+            //float a = sin(frameCount*-0.05);
+            //float b = cos(frameCount*0.05);
+            //float m = 2;
+            //float n2 = sin(frameCount*0.05) *(x*0.5) ;
+            //float n3 = cos(frameCount*0.005) *(y*-0.5) ;
+        
         
         // don't change -> superformula
         if(!sup1C){
@@ -292,4 +313,7 @@ public void Sup1(){
 }
 public void Sup2(){
    sup2C = !sup2C;
+}
+public void Cross(){
+  cross = !cross;
 }
